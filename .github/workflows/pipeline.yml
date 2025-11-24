@@ -18,8 +18,7 @@ jobs:
 
       - name: Build Tailwind CSS
         run: |
-          docker exec -it ruby_appsec-web-1 bash
-          rails tailwindcss:watch
+          docker exec ruby_appsec-web-1 rails tailwindcss:build
 
      # - name: Load CSS
      #   run : |
