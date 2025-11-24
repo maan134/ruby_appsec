@@ -16,6 +16,13 @@ jobs:
           docker compose build
           docker compose up -d
 
+      - name: Add 4GB swap
+        run: |
+          sudo fallocate -l 4G /swapfile
+          sudo chmod 600 /swapfile
+          sudo mkswap /swapfile
+          sudo swapon /swapfile
+
       - name: Build Tailwind CSS
         run: |
           docker exec ruby_appsec-web-1 rails tailwindcss:build
