@@ -18,5 +18,5 @@ jobs:
 
       - name: Load CSS
         run : |
-          docker exec -it sql_injection_web_1 bash
+          docker exec -it ruby_appsec-web-1 bash
           rails tailwindcss:watch
