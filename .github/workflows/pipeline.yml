@@ -1,23 +1,11 @@
 name: Ruby on Rails
 
 on:
-  push:
-    branches:
-      - main
+  workflow-dispatch
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:alpine
-        env:
-          POSTGRES_DB: myapp_test
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-        ports:
-          - 5432:5432
 
     steps:
       - name: Checkout code
