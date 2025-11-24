@@ -13,8 +13,8 @@ jobs:
 
       - name: Build
         run : |
-          docker-compose build
-          docker-compose up -d
+          docker compose build
+          docker compose up -d
 
       - name: Load CSS
         run : |
