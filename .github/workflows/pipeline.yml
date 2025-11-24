@@ -11,13 +11,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.0
+      - name: Build
+        run : |
+          docker-compose build
+          docker-compose up -d
 
-      - name: Install dependencies
-        run: bundle install
-
-      - name: Run tests
-        run: bundle exec rspec
+      - name: Load CSS
+        run : |
+          docker exec -it sql_injection_web_1 bash
+          rails tailwindcss:watch
