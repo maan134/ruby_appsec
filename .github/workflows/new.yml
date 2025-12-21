@@ -1,0 +1,51 @@
+name: Rails Docker CI Pipeline
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Build Docker images
+        run: |
+          docker-compose build
+
+      - name: Start application containers
+        run: |
+          docker-compose up -d
+
+      - name: Wait for services to be ready
+        run: |
+          sleep 20
+
+      - name: Setup Database (create & migrate)
+        run: |
+          docker exec sql_injection_web_1 rake db:create
+          docker exec sql_injection_web_1 rake db:migrate
+
+      - name: Seed Database (optional)
+        run: |
+          docker exec sql_injection_web_1 rake db:seed
+
+      - name: Verify application is running
+        run: |
+          docker ps
+          curl --fail http://localhost:3000 || exit 1
+
+      - name: Stop containers
+        if: always()
+        run: |
+          docker-compose down
