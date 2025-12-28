@@ -31,12 +31,6 @@ jobs:
         run: |
           sleep 100
 
-      - name: DB Setup
-        run: |
-          WEB=$(docker-compose ps -q web)
-          docker exec $WEB rake db:create
-          docker exec $WEB rake db:migrate
-
       - name: Seed Database (optional)
         run: |
           docker exec ruby_appsec_web_1 rake db:seed
