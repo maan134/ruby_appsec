@@ -33,7 +33,8 @@ jobs:
 
       - name: Setup Database (create & migrate)
         run: |
-          docker exec ruby_appsec_web_1
+          docker exec ruby_appsec_web_1 rake db:create
+          docker exec ruby_appsec_web_1 rake db:migrate
           docker ps
 
       - name: Seed Database (optional)
