@@ -43,7 +43,7 @@ jobs:
 
       - name: Verify application is running
         run: |
-          docker ps
+          docker-compose ps
           curl --fail http://localhost:3000 || exit 1
 
       - name: Stop containers
