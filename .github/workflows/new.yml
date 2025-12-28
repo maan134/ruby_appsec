@@ -38,7 +38,7 @@ jobs:
 
       - name: Seed Database (optional)
         run: |
-          docker exec sql_injection_web_1 rake db:seed
+          docker exec ruby_appsec_web_1 rake db:seed
 
       - name: Verify application is running
         run: |
