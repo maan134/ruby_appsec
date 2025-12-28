@@ -33,7 +33,7 @@ jobs:
 
       - name: Seed Database (optional)
         run: |
-          docker exec -it ruby_appsec_web_1 bash
+          docker exec ruby_appsec_web_1 bash
           rails tailwindcss:watch
 
       - name: Verify application is running
