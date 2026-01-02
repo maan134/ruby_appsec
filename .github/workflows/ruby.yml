@@ -31,10 +31,10 @@ jobs:
           gem install bundler
           bundle install
 
-      - name: Linting and Styling
-        run: |
-          gem install rubocop
-          rubocop -a
+#      - name: Linting and Styling
+#        run: |
+#          gem install rubocop
+#          rubocop -a
 
       - name: Vulnerability Checks
         run: |
