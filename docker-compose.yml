@@ -15,3 +15,10 @@ services:
       - "8880:8880"
     depends_on:
       - db
+  tailwind:
+    build: .
+    command: bash -c "bundle exec rails tailwindcss:watch"
+    volumes:
+      - .:/myapp
+    depends_on:
+      - web
