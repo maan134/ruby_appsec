@@ -9,7 +9,7 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  host: ruby_appsec-db-1
+  host: db
   username: postgres
   password:
   pool: 5
