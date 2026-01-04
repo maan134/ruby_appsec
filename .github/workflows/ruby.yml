@@ -76,6 +76,16 @@ jobs:
           name: SAST-Finding-Report
           path: sast_fin.json
 
+      - name: Generate SBOM
+        run: |
+          gem install cyclonedx-ruby
+          cyclonedx-ruby --output-file sbom.json --format json
+      - name: Upload SBOM Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: sbom.json
+
 #      - name: Linting and Styling
 #        run: |
 #          gem install rubocop
