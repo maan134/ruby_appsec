@@ -86,6 +86,12 @@ jobs:
           name: sbom
           path: sbom.json
 
+      - name: Secrets Scan - Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        with:
+          report_format: json
+          report_path: gitleaks.json
+
 #      - name: Linting and Styling
 #        run: |
 #          gem install rubocop
