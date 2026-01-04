@@ -22,14 +22,18 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup Ruby
-        uses: ruby/setup-ruby@78c01b705fd9d5ad960d432d3a0cfa341d50e410
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.0.2'
-
+          
       - name: Setup Dependencies
         run: |
           gem install bundler
           bundle install
+      - name: SAST testing
+        run: |
+          gem install brakeman
+          brakeman --no-exit-on-warn --no-exit-on-error          
 
 #      - name: Linting and Styling
 #        run: |
