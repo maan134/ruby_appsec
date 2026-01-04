@@ -112,9 +112,9 @@ jobs:
       - name: Secrets Scan - Gitleaks
         run: |
           docker run --rm \
-            -v ${{ github.workspace }} \
+            -v ${{ github.workspace }}/ruby_appsec \
             zricethezav/gitleaks:latest detect \
-            --source=/ \
+            --source=/ruby_appsec \
             --report-format json \
             --report-path gitleaks.json \
             --no-git \
