@@ -96,6 +96,17 @@ jobs:
         with:
           name: trufflehog-report
           path: trufflehog_results.json
+
+      - name: Secret Scanning
+        uses: gitleaks/gitleaks-action@v2
+        with:
+          report-format: json
+          report-path: gitleaks.json
+      - name: Upload Gitleaks Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitleak-report
+          path: gitleaks.json
 #      - name: Linting and Styling
 #        run: |
 #          gem install rubocop
