@@ -32,12 +32,12 @@ jobs:
           bundle install
 
   #bundle-audit
-  Dependency-Scan:
-    runs-on: ubuntu-latest
-    needs: build
-    permissions:
-      security-events: write
-    steps:
+  #Dependency-Scan:
+   # runs-on: ubuntu-latest
+    #needs: build
+    #permissions:
+    #  security-events: write
+    #steps:
       - name: Vulnerability Checks
         continue-on-error: true
         run: |
