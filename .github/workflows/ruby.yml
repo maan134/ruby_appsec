@@ -98,11 +98,11 @@ jobs:
           path: trufflehog_results.json
 
       - name: Secret Scanning
+        continue-on-error: true
         uses: gitleaks/gitleaks-action@v2
         with:
           report-format: json
           report-path: gitleaks.json
-          exit-code: 0
       - name: Upload Gitleaks Artifact
         uses: actions/upload-artifact@v4
         with:
