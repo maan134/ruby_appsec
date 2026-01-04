@@ -30,22 +30,45 @@ jobs:
         run: |
           gem install bundler
           bundle install
+
+  #bundle-audit
+  Dependency-Scan:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Vulnerability Checks
+        continue-on-error: true
+        run: |
+          gem install bundler-audit
+          bundle-audit update
+          bundle-audit check --format json --output bundle-audit.json
+      - name: Upload bundleAudit to DefectDojo
+        run: |
+          curl -X POST 'https://demo.defectdojo.org/api/v2/reimport-scan/' \
+            -H 'accept: application/json' \
+            -H 'Authorization: Token 548afd6fab3bea9794a41b31da0e9404f733e222' \
+            -F 'test=67' \
+            -F '[email protected];type=application/json' \
+            -F file=@"bundle-audit.json" \
+            -F 'scan_type=NPM Audit Scan' \
+            -F 'tags=test'
+      - name: Upload npmAudit Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bundle-audit-report
+          path: bundle-audit.json
+          
       - name: SAST testing
         run: |
-          gem install brakeman
-          brakeman --no-exit-on-warn --no-exit-on-error          
+            gem install brakeman
+            brakeman --no-exit-on-warn --no-exit-on-error          
 
 #      - name: Linting and Styling
 #        run: |
 #          gem install rubocop
 #          rubocop -a
 
-      - name: Vulnerability Checks
-        continue-on-error: true
-        run: |
-          gem install bundler-audit
-          bundle-audit update
-          bundle-audit check
+      
 
       - name: Run Unit Tests
         run: |
