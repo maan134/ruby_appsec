@@ -31,11 +31,11 @@ jobs:
           gem install bundler
           bundle install
       - name: Vulnerability Checks
-        #continue-on-error: true
+        continue-on-error: true
         run: |
           gem install bundler-audit
           bundle-audit update
-          bundle-audit check
+          bundle-audit check --format json
       - name: Upload bundleAudit to DefectDojo
         run: |
           curl -X POST 'https://demo.defectdojo.org/api/v2/reimport-scan/' \
