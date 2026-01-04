@@ -108,6 +108,19 @@ jobs:
         with:
           name: gitleak-report
           path: ./gitleaks.json
+
+      - name: Secrets Scan - Gitleaks
+        run: |
+          docker run --rm \
+            -v ${{ github.workspace }} \
+            zricethezav/gitleaks:latest detect \
+            --source=/repo \
+            --report-format json \
+            --report-path gitleaks.json \
+            --no-git \
+            || true
+      - name: Debug - List files
+        run: ls -la
        
 #      - name: Linting and Styling
 #        run: |
