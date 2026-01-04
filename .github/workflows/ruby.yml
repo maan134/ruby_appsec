@@ -79,7 +79,7 @@ jobs:
       - name: Generate SBOM
         run: |
           gem install cyclonedx-ruby
-          cyclonedx-ruby --output-file sbom.json --format json
+          cyclonedx-ruby --output sbom.json --format json
       - name: Upload SBOM Artifact
         uses: actions/upload-artifact@v4
         with:
