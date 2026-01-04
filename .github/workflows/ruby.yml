@@ -48,7 +48,7 @@ jobs:
             -F 'scan_type=Bundler-Audit Scan' \
             -F 'tags=test'
           
-      - name: Upload npmAudit Artifact
+      - name: Upload bundleAudit Artifact
         uses: actions/upload-artifact@v4
         with:
           name: bundle-audit-report
@@ -57,7 +57,24 @@ jobs:
       - name: SAST testing
         run: |
             gem install brakeman
-            brakeman --no-exit-on-warn --no-exit-on-error          
+            brakeman --no-exit-on-warn --no-exit-on-error -f json -o sast_fin.json    
+      - name: Upload bundleAudit to DefectDojo
+        run: |
+          curl -X POST 'https://demo.defectdojo.org/api/v2/reimport-scan/' \
+            -H 'accept: application/json' \
+            -H 'Authorization: Token df8dd7d51d0861c60ff8544f13a9fcee37a58d44' \
+            -F 'test=34' \
+            -F 'active=true' \
+            -F '[email protected];type=application/json' \
+            -F file=@"sast_fin.json" \
+            -F 'scan_type=Brakeman Scan' \
+            -F 'tags=test'
+          
+      - name: Upload SAST-Finding Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SAST-Finding-Report
+          path: sast_fin.json
 
 #      - name: Linting and Styling
 #        run: |
