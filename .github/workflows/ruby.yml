@@ -43,6 +43,7 @@ jobs:
             -H 'Authorization: Token df8dd7d51d0861c60ff8544f13a9fcee37a58d44' \
             -F 'test=33' \
             -F 'active=true' \
+            -F 'minimum_severity=Low'
             -F '[email protected];type=application/json' \
             -F file=@"bundle-audit.json" \
             -F 'scan_type=Bundler-Audit Scan' \
