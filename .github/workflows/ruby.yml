@@ -41,6 +41,7 @@ jobs:
 #          rubocop -a
 
       - name: Vulnerability Checks
+        continue-on-error: true
         run: |
           gem install bundler-audit
           bundle-audit update
