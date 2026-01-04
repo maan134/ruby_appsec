@@ -118,7 +118,8 @@ jobs:
             --report-format json \
             --report-path gitleaks.json \
             --no-git \
-            || true
+            || true \
+            cat gitleaks.json
       - name: Debug - List files
         run: ls -la
        
