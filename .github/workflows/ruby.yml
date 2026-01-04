@@ -30,16 +30,8 @@ jobs:
         run: |
           gem install bundler
           bundle install
-
-  #bundle-audit
-  #Dependency-Scan:
-   # runs-on: ubuntu-latest
-    #needs: build
-    #permissions:
-    #  security-events: write
-    #steps:
       - name: Vulnerability Checks
-        continue-on-error: true
+        #continue-on-error: true
         run: |
           gem install bundler-audit
           bundle-audit update
@@ -70,7 +62,13 @@ jobs:
 #          gem install rubocop
 #          rubocop -a
 
-      
+      #bundle-audit
+  #Dependency-Scan:
+   # runs-on: ubuntu-latest
+    #needs: build
+    #permissions:
+    #  security-events: write
+    #steps:
 
       - name: Run Unit Tests
         run: |
