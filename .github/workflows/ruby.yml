@@ -109,6 +109,16 @@ jobs:
           name: gitleak-report
           path: gitleaks.json
 
+      - name: Secret Scanning with installed version
+        run: |
+          sudo apt install gitleaks
+          gitleaks detect -v --report-format=json --report-path=gitleaks.json --log-level=debug
+      - name: Upload Gitleaks Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitleak-report
+          path: gitleaks.json
+
     #  - name: Secrets Scan - Gitleaks
      #   run: |
       #    docker pull ghcr.io/gitleaks/gitleaks:latest
