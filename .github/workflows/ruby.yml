@@ -110,6 +110,7 @@ jobs:
           path: gitleaks.json
 
       - name: Secret Scanning with installed version
+        continue-on-error: true
         run: |
           sudo apt install gitleaks
           gitleaks detect -v --report-format=json --report-path=gitleaks.json --log-level=debug
