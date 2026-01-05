@@ -97,18 +97,6 @@ jobs:
           name: trufflehog-report
           path: trufflehog_results.json
 
-      - name: Secret Scanning
-        continue-on-error: true
-        uses: gitleaks/gitleaks-action@v2
-        with:
-          args: --report-path "report.json" --report-format json
-      - name: Upload Gitleaks Artifact
-        if: success() && hashFiles('gitleaks.json') != ''
-        uses: actions/upload-artifact@v4
-        with:
-          name: gitleak-report
-          path: gitleaks.json
-
       - name: Secret Scanning with installed version
         continue-on-error: true
         run: |
