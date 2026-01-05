@@ -62,7 +62,7 @@ jobs:
         run: |
           curl -X POST 'https://demo.defectdojo.org/api/v2/reimport-scan/' \
             -H 'accept: application/json' \
-            -H 'Authorization: Token ${{ secrets.DEFECT_DO_TOKEN }}' \
+            -H 'Authorization: Token ${{ secrets.DEFECT_DOJO_TOKEN }}' \
             -F 'test=44' \
             -F 'active=true' \
             -F '[email protected];type=application/json' \
