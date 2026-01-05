@@ -90,7 +90,7 @@ jobs:
         run: |
           curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sh -s -- -b /usr/local/bin
           trufflehog --version
-          trufflehog git https://github.com/${{ github.repository }} --results=verified,unknown --json > trufflehog_results.json
+          trufflehog git https://github.com/${{ github.repository }} --json > trufflehog_results.json
       - name: Upload TruffleHog Artifact
         uses: actions/upload-artifact@v4
         with:
