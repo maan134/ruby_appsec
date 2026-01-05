@@ -112,7 +112,7 @@ jobs:
       - name: Secrets Scan - Gitleaks
         run: |
           docker pull ghcr.io/gitleaks/gitleaks:latest
-          docker run -v https://github.com/${{ github.repository }}:/path ghcr.io/gitleaks/gitleaks:latest detect -v --source=/path --report-format json --report-path /path/gitleaks.json
+          docker run -v https://github.com/${{ github.repository }}:/path ghcr.io/gitleaks/gitleaks:latest git -v --source=/path --report-format json --report-path /path/gitleaks.json
             
       - name: Debug - List files
         run: ls -la
