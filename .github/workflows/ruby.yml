@@ -30,6 +30,39 @@ jobs:
         run: |
           gem install bundler
           bundle install
+
+      - name: Generate SBOM
+        run: |
+          gem install cyclonedx-ruby
+          cyclonedx-ruby -p . -o sbom.json
+      - name: Upload SBOM Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: sbom.json
+
+      - name: Secret Scanning 
+        continue-on-error: true
+        run: |
+          sudo apt install gitleaks
+          gitleaks detect -v --report-format=json --report-path=gitleaks.json --log-level=debug
+      - name: Upload bundleAudit to DefectDojo
+        run: |
+          curl -X POST 'https://demo.defectdojo.org/api/v2/reimport-scan/' \
+            -H 'accept: application/json' \
+            -H 'Authorization: Token ${{ secrets.DEFECT_DOJO_TOKEN }}' \
+            -F 'test=37' \
+            -F 'active=true' \
+            -F '[email protected];type=application/json' \
+            -F file=@"gitleaks.json" \
+            -F 'scan_type=Gitleaks Scan' \
+            -F 'tags=test'
+      - name: Upload Gitleaks Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitleak-report
+          path: gitleaks.json
+          
       - name: Vulnerability Checks
         continue-on-error: true
         run: |
@@ -40,7 +73,7 @@ jobs:
         run: |
           curl -X POST 'https://demo.defectdojo.org/api/v2/reimport-scan/' \
             -H 'accept: application/json' \
-            -H 'Authorization: Token be9ecfc740805e0b9ba7f01d772aabcb52e2dadf' \
+            -H 'Authorization: Token ${{ secrets.DEFECT_DOJO_TOKEN }}' \
             -F 'test=35' \
             -F 'active=true' \
             -F '[email protected];type=application/json' \
@@ -76,15 +109,7 @@ jobs:
           name: SAST-Finding-Report
           path: sast_fin.json
 
-      - name: Generate SBOM
-        run: |
-          gem install cyclonedx-ruby
-          cyclonedx-ruby -p . -o sbom.json
-      - name: Upload SBOM Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: sbom
-          path: sbom.json
+      
 
       - name: Secret Scanning
         run: |
@@ -97,18 +122,7 @@ jobs:
           name: trufflehog-report
           path: trufflehog_results.json
 
-      - name: Secret Scanning with installed version
-        continue-on-error: true
-        run: |
-          sudo apt install gitleaks
-          gitleaks detect -v --report-format=json --report-path=gitleaks.json --log-level=debug
-      - name: Upload Gitleaks Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: gitleak-report
-          path: gitleaks.json
-
-    #  - name: Secrets Scan - Gitleaks
+      #  - name: Secrets Scan - Gitleaks
      #   run: |
       #    docker pull ghcr.io/gitleaks/gitleaks:latest
        #   docker run -v https://github.com/${{ github.repository }}:/path ghcr.io/gitleaks/gitleaks:latest git -v --source=/path --report-format json --report-path /path/gitleaks.json
