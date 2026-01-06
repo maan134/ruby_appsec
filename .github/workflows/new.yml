@@ -33,9 +33,7 @@ jobs:
 
       - name: Seed Database (optional)
         run: |
-          docker exec -it ruby_appsec_web_1 bash
-          rake db:create
-          rake db:migrate
+          docker exec ruby_appsec_web_1 bash -c "rake db:seed"
 
       - name: Verify application is running
         run: |
