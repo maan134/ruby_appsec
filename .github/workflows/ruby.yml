@@ -71,6 +71,7 @@ jobs:
           bundle-audit check --format json --output bundle-audit.json
       - name: Upload bundleAudit to DefectDojo
         run: |
+          cat bundle-audit.json
           curl -X POST 'https://demo.defectdojo.org/api/v2/reimport-scan/' \
             -H 'accept: application/json' \
             -H 'Authorization: Token ${{ secrets.DEFECT_DOJO_TOKEN }}' \
