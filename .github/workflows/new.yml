@@ -34,7 +34,7 @@ jobs:
       - name: Seed Database (optional)
         run: |
           docker exec ruby_appsec_web_1 bash -c "rake db:seed"
-          docker exec ruby_appsec_db_1 psql -U postgres -d sql_injection_dev -c "INSERT INTO users (email, encrypted_password) VALUES ('${{ secrets.USER_NAME }}', '${{ secrets.PASSWORD }}');"
+          docker exec ruby_appsec_db_1 psql -U postgres -d sql_injection_dev -c "INSERT INTO users (email, encrypted_password) VALUES ('${{ secrets.USER_NAME }}', '${{ secrets.PASSWORD }}',null,null,null,2026-01-04 07:05:32.310761,null,t,null);"
           docker exec ruby_appsec_db_1 psql -U postgres -d sql_injection_dev -c "SELECT * FROM users;"
 
       - name: Verify application is running
