@@ -31,10 +31,11 @@ jobs:
         run: |
           sleep 20
 
-      #- name: Seed Database (optional)
-       # run: |
-        #  docker exec ruby_appsec_web_1 bash
-         # bundle exec rails tailwindcss:watch
+      - name: Seed Database (optional)
+        run: |
+          docker exec -it ruby_appsec_web_1 bash
+          rake db:create
+          rake db:migrate
 
       - name: Verify application is running
         run: |
