@@ -41,7 +41,7 @@ jobs:
           curl -X POST 'https://demo.defectdojo.org/api/v2/reimport-scan/' \
             -H 'accept: application/json' \
             -H 'Authorization: Token be9ecfc740805e0b9ba7f01d772aabcb52e2dadf' \
-            -F 'test=43' \
+            -F 'test=35' \
             -F 'active=true' \
             -F '[email protected];type=application/json' \
             -F file=@"bundle-audit.json" \
@@ -63,7 +63,7 @@ jobs:
           curl -X POST 'https://demo.defectdojo.org/api/v2/reimport-scan/' \
             -H 'accept: application/json' \
             -H 'Authorization: Token ${{ secrets.DEFECT_DOJO_TOKEN }}' \
-            -F 'test=44' \
+            -F 'test=36' \
             -F 'active=true' \
             -F '[email protected];type=application/json' \
             -F file=@"sast_fin.json" \
