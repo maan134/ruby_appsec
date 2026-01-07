@@ -25,7 +25,8 @@ jobs:
 
       - name: Start application containers
         run: |
-          docker-compose up -d
+          docker network create zapnet
+          docker-compose up -d --network zapnet
 
       - name: Wait for services to be ready
         run: |
