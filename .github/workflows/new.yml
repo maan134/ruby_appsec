@@ -46,7 +46,7 @@ jobs:
           docker run --rm --network ruby_appsec_default\
             -v $(pwd)/zap_reports:/zap/wrk \
             ghcr.io/zaproxy/zaproxy:stable \
-            zap-baseline.py -t http://localhost:8880/ -J zap_report.json -d || true   
+            zap-baseline.py -t http://ruby_appsec_web_1:8880 -J zap_report.json -d || true   
 
       - name: Verify application is running
         run: |
