@@ -25,9 +25,9 @@ jobs:
 
       - name: Start application containers
         run: |
-          docker network create zapnet
-          docker-compose up -d --network zapnet
-
+          docker-compose up -d 
+        #docker network create zapnet
+          
       - name: Wait for services to be ready
         run: |
           sleep 20
@@ -43,7 +43,7 @@ jobs:
         run: |
           mkdir -p zap_reports
           chmod 777 zap_reports
-          docker run --rm --network zapnet \
+          docker run --rm \
             -v $(pwd)/zap_reports:/zap/wrk \
             ghcr.io/zaproxy/zaproxy:stable \
             zap-baseline.py -t http://localhost:8880/ -J zap_report.json -d || true   
