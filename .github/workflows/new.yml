@@ -38,12 +38,12 @@ jobs:
           docker exec ruby_appsec_db_1 psql -U postgres -d sql_injection_dev -c "INSERT INTO users (email, encrypted_password, created_at, updated_at) VALUES ('${{ secrets.USER_NAME }}', '${{ secrets.PASSWORD }}', '2025-01-15 10:30:00'::timestamp, '2025-01-15 10:30:00'::timestamp);"
           docker exec ruby_appsec_db_1 psql -U postgres -d sql_injection_dev -c "SELECT * FROM users;"
         #  docker exec ruby_appsec_web_1 bash -c "rake db:seed"
-          
+
       - name: Run ZAP Baseline Scan (via Docker)
         run: |
           mkdir -p zap_reports
           chmod 777 zap_reports
-          docker run --rm \
+          docker run --rm --network ruby_appsec_default\
             -v $(pwd)/zap_reports:/zap/wrk \
             ghcr.io/zaproxy/zaproxy:stable \
             zap-baseline.py -t http://localhost:8880/ -J zap_report.json -d || true   
