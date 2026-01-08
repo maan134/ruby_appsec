@@ -1,0 +1,17 @@
+<context>
+  <name>ruby_appsec_web_1</name>
+  <includeRegex>http://localhost:8880/.*</includeRegex>
+  <authentication>
+    <method>formBasedAuthentication</method>
+    <loginUrl>http://localhost:8880/users/sign_in</loginUrl>
+    <loginRequest>
+      POST http://localhost:8880/users/sign_in
+      Content-Type: application/json
+
+      {
+        "email": "mm123@gmail.com",
+        "password": "abc123"
+      }
+    </loginRequest>
+  </authentication>
+</context>
