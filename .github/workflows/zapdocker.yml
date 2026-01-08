@@ -24,11 +24,12 @@ jobs:
 
       - name: Build Docker images
         run: |
-          docker compose up --abort-on-container-exit || echo "ZAP scan completed with findings"
+          docker-compose build
+          
 
       - name: Start application containers
         run: |
-          docker-compose up -d 
+          docker compose up --abort-on-container-exit || echo "ZAP scan completed with findings"
         #docker network create zapnet
           
       - name: Wait for services to be ready
