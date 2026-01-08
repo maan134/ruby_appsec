@@ -17,7 +17,7 @@ jobs:
       - name: Install Docker Compose
         run: |
           sudo apt-get update
-          sudo apt-get install -y docker-compose
+          sudo apt-get install -y docker compose
 
       - name: Build Docker images
         run: |
@@ -39,14 +39,15 @@ jobs:
           docker exec ruby_appsec_db_1 psql -U postgres -d sql_injection_dev -c "SELECT * FROM users;"
         #  docker exec ruby_appsec_web_1 bash -c "rake db:seed"
 
+      
       - name: Run ZAP Baseline Scan (via Docker)
         run: |
           mkdir -p zap_reports
           chmod 777 zap_reports
-          docker run --rm --network ruby_appsec_default\
+          docker run --rm --network ruby_appsec_default \
             -v $(pwd)/zap_reports:/zap/wrk \
             ghcr.io/zaproxy/zaproxy:stable \
-            zap-baseline.py -t http://ruby_appsec_web_1:8880/users/sign_in -J zap_report.json -d || true   
+            zap-baseline.py -t http://ruby_appsec_web_1:8880 -J zap_report.json -d || true   
 
       - name: Verify application is running
         run: |
