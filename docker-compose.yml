@@ -24,6 +24,6 @@ services:
      # - ./reports:/zap/reports
     command: >
       sh -c "sleep 10 && zap-full-scan.py
-      -t http://localhost:88800
+      -t http://localhost:8880
       -r /tmp/zap-report.html
       -J /tmp/zap-report.json"
