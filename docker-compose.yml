@@ -28,11 +28,11 @@ services:
     volumes:
       - ./zap-config:/zap/wrk:ro
      # - ./reports:/zap/reports
-   # command: >
-   #   sh -c "sleep 10 && zap-full-scan.py
-   #   -t http://ruby_appsec-web-1:8880
-    #  -r /tmp/zap-report.html
-    #  -J /tmp/zap-report.json"
+   command: >
+     sh -c "sleep 10 && zap-full-scan.py
+     -t http://ruby_appsec-web-1:8880
+     -r /tmp/zap-report.html
+     -J /tmp/zap-report.json"
 
 networks:
   zapnet:
