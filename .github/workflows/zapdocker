@@ -40,14 +40,17 @@ jobs:
         #  docker exec ruby_appsec_web_1 bash -c "rake db:seed"
 
       
-      - name: Run ZAP Baseline Scan (via Docker)
+      - name: Copy ZAP reports from container
         run: |
-          mkdir -p zap_reports
-          chmod 777 zap_reports
-          docker run --rm --network ruby_appsec_default \
-            -v $(pwd)/zap_reports:/zap/wrk \
-            ghcr.io/zaproxy/zaproxy:stable \
-            zap-baseline.py -t http://ruby_appsec_web_1:8880 -J zap_report.json -d || true   
+          ZAP_CONTAINER=$(docker ps -aqf "name=zap")
+          docker cp "$ZAP_CONTAINER":/tmp/zap-report.html reports/zap-report.html || echo "No HTML report found"
+          docker cp "$ZAP_CONTAINER":/tmp/zap-report.json reports/zap-report.json || echo "No JSON report found"
+
+      - name: Upload ZAP HTML Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-report
+          path: reports/zap-report.html
 
       - name: Verify application is running
         run: |
