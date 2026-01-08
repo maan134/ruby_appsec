@@ -20,7 +20,7 @@ services:
     networks:
       - zapnet
   zap:
-    image: ictu/zap2docker-weekly
+    image: ghcr.io/zaproxy/zaproxy:stable
     depends_on:
       - web
     networks:
