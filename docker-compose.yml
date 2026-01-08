@@ -34,6 +34,6 @@ services:
       -r /tmp/zap-report.html
       -J /tmp/zap-report.json"
 
-  networks:
-  zapnet:
-    driver: bridge
+networks:
+zapnet:
+  driver: bridge
