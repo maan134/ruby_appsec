@@ -20,20 +20,21 @@ services:
       - db
     networks:
       - zapnet
-  zap:
-    image: ghcr.io/zaproxy/zaproxy:stable
-    depends_on:
-      - web
-    networks:
-      - zapnet
-    volumes:
-     # - ./zap-config:/zap/wrk:ro
-      - .:/zap/wrk
-    command: >
-         sh -c "sleep 10 && zap-full-scan.py
-         -t http://ruby_appsec-web-1:8880
-         -r zap-report.html
-         -J zap-report.json"
+      
+  # zap:
+  #   image: ghcr.io/zaproxy/zaproxy:stable
+  #   depends_on:
+  #     - web
+  #   networks:
+  #     - zapnet
+  #   volumes:
+  #    # - ./zap-config:/zap/wrk:ro
+  #     - .:/zap/wrk
+  #   command: >
+  #        sh -c "sleep 10 && zap-full-scan.py
+  #        -t http://ruby_appsec-web-1:8880
+  #        -r zap-report.html
+  #        -J zap-report.json"
 
 networks:
   zapnet:
