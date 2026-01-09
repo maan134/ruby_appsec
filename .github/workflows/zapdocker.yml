@@ -11,10 +11,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Create reports folder
-        run: |
-          mkdir -p reports
-          chmod 777 reports
+     # - name: Create reports folder
+     #   run: |
+     #     mkdir -p reports
+     #     chmod 777 reports
 
       - name: Set up Docker
         uses: docker/setup-buildx-action@v3
