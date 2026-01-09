@@ -45,13 +45,17 @@ jobs:
         #  docker exec ruby_appsec_web_1 bash -c "rake db:seed"
 
       
-      - name: Run ZAP Baseline Scan (via Docker)
+      - name: Run ZAP Docker
         run: |
           mkdir -p zap_reports
           chmod 777 zap_reports
           docker run --rm \
-          --name ruby_appsec_zap_1 \
-          zap-baseline.py -t http://ruby_appsec_web_1:8880 -J zap_report.json -d || true 
+          --name ruby_appsec_zap_1 
+
+      - name: Run ZAP Baseline Scan (via Docker)
+        run: |
+          docker exec -it ruby_appsec_zap_1 \
+          docker exec zap-baseline.py -t http://ruby_appsec_web_1:8880 -J zap_report.json -d || true 
           
     #      docker run --rm --network ruby_appsec_default \
      #       -v $(pwd)/zap_reports:/zap/wrk \
