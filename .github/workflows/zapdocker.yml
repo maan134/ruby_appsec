@@ -32,8 +32,8 @@ jobs:
 
       - name: Start application containers
         run: |
-          docker compose up -d || echo "ZAP scan completed with findings"
-          docker exec ruby_appsec-web-1 rails tailwindcss:build
+          docker compose up || echo "ZAP scan completed with findings"
+        # docker exec ruby_appsec-web-1 rails tailwindcss:build
         #docker network create zapnet
           
       - name: Wait for services to be ready
@@ -45,9 +45,9 @@ jobs:
           docker-compose ps
           curl --fail http://ruby_appsec-web-1:8880 || exit 1
 
-      - name: Seed Database (optional)
-        run: |
-          docker exec ruby_appsec_web_1 bash -c "rake db:seed"
+     # - name: Seed Database (optional)
+      #  run: |
+      #    docker exec ruby_appsec_web_1 bash -c "rake db:seed"
      #     docker exec ruby_appsec_db_1 psql -U postgres -d sql_injection_dev -c "INSERT INTO users (email, encrypted_password, created_at, updated_at) VALUES ('${{ secrets.USER_NAME }}', '${{ secrets.PASSWORD }}', '2025-01-15 10:30:00'::timestamp, '2025-01-15 10:30:00'::timestamp);"
      #     docker exec ruby_appsec_db_1 psql -U postgres -d sql_injection_dev -c "SELECT * FROM users;"
         #  docker exec ruby_appsec_web_1 bash -c "rake db:seed"
