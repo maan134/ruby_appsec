@@ -11,6 +11,7 @@ services:
   web:
     build: .
     command: bash -c "rake db:create && rake db:migrate && rm -f tmp/pids/server.pid && bundle exec rails s -p 8880 -b '0.0.0.0'"
+             bash -c "rails tailwindcss:watch" 
     volumes:
       - .:/myapp
     ports:
@@ -28,11 +29,11 @@ services:
     volumes:
      # - ./zap-config:/zap/wrk:ro
       - ./reports:/zap/wrk
-   # command: >
-   #      sh -c "sleep 10 && zap-full-scan.py
-   #      -t http://ruby_appsec-web-1:8880
-   #      -r zap-report.html
-   #      -J zap-report.json"
+    command: >
+         sh -c "sleep 10 && zap-full-scan.py
+         -t http://ruby_appsec-web-1:8880
+         -r zap-report.html
+         -J zap-report.json"
 
 networks:
   zapnet:
