@@ -30,14 +30,16 @@ services:
       - .:/zap/wrk
     networks:
       - zapnet
+    command: >
+      sh -c "sleep 10 && zap-full-scan.py
+      -t http://ruby_appsec_web_1:8880
+      -r zap-report.html
+      -J zap-report.json"
+    
 
 networks:
   zapnet:
     driver: bridge
-  #   command: >
-  #        sh -c "sleep 10 && zap-full-scan.py
-  #        -t http://ruby_appsec-web-1:8880
-  #        -r zap-report.html
-  #        -J zap-report.json"
+ 
 
 
