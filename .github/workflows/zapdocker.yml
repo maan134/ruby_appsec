@@ -55,8 +55,8 @@ jobs:
       - name: Copy ZAP reports from container
         run: |
           ZAP_CONTAINER=$(docker ps -aqf "name=ruby_appsec-zap-1")
-          docker cp "$ZAP_CONTAINER":/tmp/zap-report.html reports/zap-report.html || echo "No HTML report found"
-          docker cp "$ZAP_CONTAINER":/tmp/zap-report.json reports/zap-report.json || echo "No JSON report found"
+          docker cp "$ZAP_CONTAINER":/zap/wrk/zap-report.html reports/zap-report.html || echo "No HTML report found"
+          docker cp "$ZAP_CONTAINER":/zap/wrk/zap-report.json reports/zap-report.json || echo "No JSON report found"
 
       - name: Upload ZAP HTML Report
         uses: actions/upload-artifact@v4
