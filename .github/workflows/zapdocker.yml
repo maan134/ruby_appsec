@@ -32,7 +32,7 @@ jobs:
 
       - name: Start application containers
         run: |
-          docker compose up || echo "ZAP scan completed with findings"
+          docker compose up -d || echo "ZAP scan completed with findings"
           docker exec ruby_appsec-web-1 rails tailwindcss:build
         #docker network create zapnet
           
