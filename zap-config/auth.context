@@ -69,7 +69,6 @@
                 <loginbody>user%5Bemail%5D=mm123@gmail.com&amp;user%5Bpassword%5D=abc123&amp;user%5Bremember_me%5D=0&amp;commit=Log+in</loginbody>
                 <loginpageurl>http://localhost:8880/users/sign_in</loginpageurl>
             </form>
-       <forceduser>117</forceduser>
         <session>
             <type>0</type>
         </session>
