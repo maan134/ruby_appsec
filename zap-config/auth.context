@@ -1,17 +1,85 @@
 <context>
-  <name>ruby_appsec_web_1</name>
-  <includeRegex>http://localhost:8880/.*</includeRegex>
-  <authentication>
-    <method>formBasedAuthentication</method>
-    <loginUrl>http://localhost:8880/users/sign_in</loginUrl>
-    <loginRequest>
-      POST http://localhost:8880/users/sign_in
-      Content-Type: application/json
-
-      {
-        "user email": "mm123@gmail.com",
-        "password": "abc123"
-      }
-    </loginRequest>
-  </authentication>
-</context>
+        <name>Default Context</name>
+        <desc/>
+        <inscope>true</inscope>
+        <incregexes>http://localhost:8880.*</incregexes>
+        <excregexes>http://localhost:8880/users/sign_out.*</excregexes>
+        <tech>
+            <include>Db.PostgreSQL</include>
+            <include>Framework</include>
+            <include>Framework.Next.js</include>
+            <include>Framework.React</include>
+            <include>Language.Ruby</include>
+            <include>Language.XML</include>
+            <include>OS.Windows</include>
+            <include>SCM.Git</include>
+            <exclude>Db</exclude>
+            <exclude>Db.CouchDB</exclude>
+            <exclude>Db.Firebird</exclude>
+            <exclude>Db.HypersonicSQL</exclude>
+            <exclude>Db.IBM DB2</exclude>
+            <exclude>Db.MariaDB</exclude>
+            <exclude>Db.Microsoft Access</exclude>
+            <exclude>Db.Microsoft SQL Server</exclude>
+            <exclude>Db.MongoDB</exclude>
+            <exclude>Db.MySQL</exclude>
+            <exclude>Db.Oracle</exclude>
+            <exclude>Db.SAP MaxDB</exclude>
+            <exclude>Db.SQLite</exclude>
+            <exclude>Db.Sybase</exclude>
+            <exclude>Language</exclude>
+            <exclude>Language.ASP</exclude>
+            <exclude>Language.C</exclude>
+            <exclude>Language.JSP/Servlet</exclude>
+            <exclude>Language.Java</exclude>
+            <exclude>Language.Java.Spring</exclude>
+            <exclude>Language.JavaScript</exclude>
+            <exclude>Language.PHP</exclude>
+            <exclude>Language.Python</exclude>
+            <exclude>OS</exclude>
+            <exclude>OS.Linux</exclude>
+            <exclude>OS.MacOS</exclude>
+            <exclude>SCM</exclude>
+            <exclude>SCM.SVN</exclude>
+            <exclude>WS</exclude>
+            <exclude>WS.Apache</exclude>
+            <exclude>WS.IIS</exclude>
+            <exclude>WS.Tomcat</exclude>
+        </tech>
+        <urlparser>
+            <class>org.zaproxy.zap.model.StandardParameterParser</class>
+            <config>{"kvps":"&amp;","kvs":"=","struct":[]}</config>
+        </urlparser>
+        <postparser>
+            <class>org.zaproxy.zap.model.StandardParameterParser</class>
+            <config>{"kvps":"&amp;","kvs":"=","struct":[]}</config>
+        </postparser>
+        <authentication>
+            <type>2</type>
+            <strategy>EACH_RESP</strategy>
+            <pollurl/>
+            <polldata/>
+            <pollheaders/>
+            <pollfreq>60</pollfreq>
+            <pollunits>REQUESTS</pollunits>
+            <loggedin>\QLogout\E</loggedin>
+            <loggedout>\QLocation: http://localhost:8880/users/sign_in\E</loggedout>
+            <form>
+                <loginurl>http://localhost:8880/users/sign_in</loginurl>
+                <loginbody>user%5Bemail%5D=mm123@gmail.com&amp;user%5Bpassword%5D=abc123&amp;user%5Bremember_me%5D=0&amp;commit=Log+in</loginbody>
+                <loginpageurl>http://localhost:8880/users/sign_in</loginpageurl>
+            </form>
+       <forceduser>117</forceduser>
+        <session>
+            <type>0</type>
+        </session>
+        <authorization>
+            <type>0</type>
+            <basic>
+                <header/>
+                <body/>
+                <logic>AND</logic>
+                <code>-1</code>
+            </basic>
+        </authorization>
+    </context>
