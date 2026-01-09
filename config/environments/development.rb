@@ -10,7 +10,7 @@ Rails.application.configure do
   config.cache_classes = false
 
   # Allow Rails console from Docker network (ZAP)
-  config.web_console.allowed_ips = '172.19.0.0/8'
+  config.web_console.allowed_ips = '172.16.0.0/12'
 
   # Do not eager load code on boot.
   config.eager_load = false
