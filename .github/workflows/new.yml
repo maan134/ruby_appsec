@@ -44,7 +44,7 @@ jobs:
         run: |
           mkdir -p zap_reports
           chmod 777 zap_reports
-          docker run --rm --network ruby_appsec_zapnet \
+          docker run --rm --network ruby_appsec_default \
             -v $(pwd)/zap_reports:/zap/wrk \
             ghcr.io/zaproxy/zaproxy:stable \
             zap-baseline.py -t http://ruby_appsec_web_1:8880 -J zap_report.json -d || true   
