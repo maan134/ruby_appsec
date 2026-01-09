@@ -32,6 +32,11 @@ jobs:
         run: |
           sleep 20
 
+      - name: Verify application is running
+        run: |
+          docker-compose ps
+          curl --fail http://localhost:8880 || exit 1
+
       - name: Seed Database (optional)
         run: |
           
@@ -53,10 +58,7 @@ jobs:
       #      ghcr.io/zaproxy/zaproxy:stable \
        #     zap-baseline.py -t http://ruby_appsec_web_1:8880 -J zap_report.json -d || true   
 
-      - name: Verify application is running
-        run: |
-          docker-compose ps
-          curl --fail http://localhost:8880 || exit 1
+      
 
       - name: Stop containers
         if: always()
