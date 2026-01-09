@@ -6,8 +6,11 @@ Rails.application.configure do
   # In the development environment your application's code is reloaded any time
   # it changes. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
-  config.hosts = ["localhost", "172.18.0.4", "ruby_appsec-web-1"]
+  config.hosts = ["localhost", "ruby_appsec-web-1"]
   config.cache_classes = false
+
+  # Allow Rails console from Docker network (ZAP)
+  config.web_console.allowed_ips = '172.19.0.0/8'
 
   # Do not eager load code on boot.
   config.eager_load = false
