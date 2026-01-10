@@ -92,7 +92,7 @@ jobs:
             -d \
             -n auth.context \
             -t http://ruby_appsec_web_1:8880 \
-            -J zap_report.json
+            -x zap_report.xml
 
     # -----------------------
     # 5. Uploading Result
@@ -106,7 +106,7 @@ jobs:
             -F 'test=46' \
             -F 'active=true' \
             -F '[email protected];type=application/json' \
-            -F file=@"$(pwd)/zap/zap_report.json" \
+            -F file=@"$(pwd)/zap/zap_report.xml" \
             -F 'scan_type=ZAP Scan' \
             -F 'tags=test'
 
