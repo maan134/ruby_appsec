@@ -57,7 +57,7 @@ jobs:
         run: |
           sudo apt install gitleaks
           gitleaks detect -v --report-format=json --report-path=gitleaks.json --log-level=debug
-      - name: Upload bundleAudit to DefectDojo
+      - name: Upload secrets Vul to DefectDojo
         run: |
           curl -X POST 'https://demo.defectdojo.org/api/v2/reimport-scan/' \
             -H 'accept: application/json' \
@@ -98,7 +98,7 @@ jobs:
         run: |
             gem install brakeman
             brakeman --no-exit-on-warn --no-exit-on-error -f json -o brakeman.json    
-      - name: Upload bundleAudit to DefectDojo
+      - name: Upload SAST Vul to DefectDojo
         run: |
           curl -X POST 'https://demo.defectdojo.org/api/v2/reimport-scan/' \
             -H 'accept: application/json' \
