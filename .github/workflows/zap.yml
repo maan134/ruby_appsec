@@ -4,14 +4,14 @@ on:
   workflow_dispatch:
 
 jobs:
-  rus-on: ubuntu-latest
+  runs-on: ubuntu-latest
 
-    steps:
+  steps:
     
-        - name: ZAP Scan
-        uses: zaproxy/action-af@main
-        with: 
-         plan: 'zap/plan.yml'
+    - name: ZAP Scan
+      uses: zaproxy/action-af@main
+      with: 
+        plan: 'zap/plan.yml'
 
     - name: Upload Security Reports
       if: always()
