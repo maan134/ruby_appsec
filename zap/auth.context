@@ -73,16 +73,14 @@
             </form>
         </authentication>
         <users>
-            <users>
-                <user>
+            <user>
                   <name>zap-user</name>
                   <enabled>true</enabled>
                   <credentials>
                     <username>${USER_NAME}</username>
                     <password>${PASSWORD}</password>
                   </credentials>
-                </user>
-              </users>    
+                </user> 
         </users>
         <forceduser>1</forceduser>
         <session>
