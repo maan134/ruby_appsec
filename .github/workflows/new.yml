@@ -39,7 +39,7 @@ jobs:
       - name: Verify application is running
         run: |
           docker-compose ps -a
-          docker exec ruby_appsec_zap_1 curl --fail http://ruby_appsec_web_1:8880 || exit 1
+          docker exec ruby_appsec_zap_1 curl --fail http://ruby_appsec_web_1:8880/users/sign_in || exit 1
 
       - name: Seed Database (optional)
         run: |
