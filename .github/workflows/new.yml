@@ -59,10 +59,14 @@ jobs:
       #       zap-baseline.py -t http://ruby_appsec_web_1:8880/users/sign_in -J zap_report.json -d || true
 
       - name: Checking Authentication
+        env:
+          USER_NAME: ${{ secrets.USER_NAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
         run: |
            docker run --rm --network ruby_appsec_zapnet \
             -v $(pwd)/zap_reports:/zap/wrk \
             ghcr.io/zaproxy/zaproxy:stable \
+            env USER_NAME=$USER_NAME PASSWORD=$PASSWORD \
             zap-full-scan.py -d -n auth.context -t http://ruby_appsec_web_1:8880/users/sign_in
       
       # - name: Run ZAP Docker
