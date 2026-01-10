@@ -49,15 +49,7 @@ jobs:
           docker exec ruby_appsec_web_1 rails tailwindcss:build
 
     # -----------------------
-    # 3. Verify running application
-    # -----------------------
-      - name: Verify application is running
-        run: |
-          docker-compose ps -a
-          docker exec ruby_appsec_zap_1 curl --fail http://ruby_appsec_web_1:8880/users/sign_in || exit 1
-
-    # -----------------------
-    # 4. Creating User
+    # 3. Creating User
     # -----------------------
 
       - name: Seed Database (optional)
@@ -99,7 +91,10 @@ jobs:
             -n auth.context \
             -t http://ruby_appsec_web_1:8880 \
             -J zap_reports/zap_report.json
-            
+
+    # -----------------------
+    # 5. Uploading Result
+    # ----------------------- 
 
       - name: Upload DAST Vul to DefectDojo
         run: |
