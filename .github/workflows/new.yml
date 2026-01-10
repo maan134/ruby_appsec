@@ -44,10 +44,8 @@ jobs:
 
       - name: Seed Database (optional)
         run: |
-            docker exec ruby_appsec_web_1 bash -c "rake db:seed"
-            docker exec ruby_appsec_db_1 psql -U postgres -d sql_injection_dev -c "SELECT * FROM users;"
-        # docker exec ruby_appsec_db_1 psql -U postgres -d sql_injection_dev -c "INSERT INTO users (email, encrypted_password, created_at, updated_at) VALUES ('${{ secrets.USER_NAME }}', '${{ secrets.PASSWORD }}', '2025-01-15 10:30:00'::timestamp, '2025-01-15 10:30:00'::timestamp);"
-          # docker exec ruby_appsec_db_1 psql -U postgres -d sql_injection_dev -c "SELECT * FROM users;"
+          docker exec ruby_appsec_db_1 psql -U postgres -d sql_injection_dev -c "INSERT INTO users (email, encrypted_password, created_at, updated_at) VALUES ('${{ secrets.USER_NAME }}', '${{ secrets.ENC_PWD }}', '2025-01-15 10:30:00'::timestamp, '2025-01-15 10:30:00'::timestamp);"
+          docker exec ruby_appsec_db_1 psql -U postgres -d sql_injection_dev -c "SELECT * FROM users;"
         #  docker exec ruby_appsec_web_1 bash -c "rake db:seed"
 
       # - name: Run ZAP Baseline Scan (via Docker)
@@ -74,11 +72,11 @@ jobs:
             -d \
             -n auth.context \
             -t http://ruby_appsec_web_1:8880 \
-            -r zap-report.html
-      - name: checking login
-        run: |
-          docker exec ruby_appsec_zap_1 \
-          curl -I http://ruby_appsec_web_1:8880/to_dos
+            
+      # - name: checking login
+      #   run: |
+      #     docker exec ruby_appsec_zap_1 \
+      #     curl -I http://ruby_appsec_web_1:8880/to_dos
       
       # - name: Run ZAP Docker
       #   run: |
