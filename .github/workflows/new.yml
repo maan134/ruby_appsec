@@ -35,7 +35,7 @@ jobs:
       - name: Verify application is running
         run: |
           docker-compose ps
-          curl --fail http://localhost:8880 || exit 1
+          docker exec ruby_appsec-zap-1 curl --fail http://localhost:8880 || exit 1
 
       - name: Seed Database (optional)
         run: |
@@ -55,7 +55,7 @@ jobs:
 
       - name: Run ZAP Baseline Scan (via Docker)
         run: |
-          docker exec ruby_appsec_zap_1 zap-baseline.py -t http://ruby_appsec_web_1:8880 -J zap_report.json -d || true
+          docker exec ruby_appsec-zap-1 zap-baseline.py -t http://ruby_appsec_web_1:8880 -J zap_report.json -d || true
         
           
     #      docker run --rm --network ruby_appsec_default \
