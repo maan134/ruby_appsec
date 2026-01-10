@@ -110,8 +110,19 @@ jobs:
             -F 'scan_type=ZAP Scan' \
             -F 'tags=test'
 
+  # -----------------------
+  # 5. Upload Artifacts
+  # -----------------------
+      - name: Upload Security Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-reports
+          path: |
+            $(pwd)/zap/zap_report.xml
+
     # -----------------------
-    # 5. Stopping Containers
+    # 6. Stopping Containers
     # -----------------------
 
       - name: Stop containers
