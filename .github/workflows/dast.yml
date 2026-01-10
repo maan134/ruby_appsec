@@ -98,6 +98,20 @@ jobs:
             -d \
             -n auth.context \
             -t http://ruby_appsec_web_1:8880 \
+            
+
+      - name: Upload bundleAudit to DefectDojo
+        run: |
+          cat bundle-audit.json
+          curl -X POST 'https://demo.defectdojo.org/api/v2/reimport-scan/' \
+            -H 'accept: application/json' \
+            -H 'Authorization: Token ${{ secrets.DEFECT_DOJO_TOKEN }}' \
+            -F 'test=44' \
+            -F 'active=true' \
+            -F '[email protected];type=application/json' \
+            -F file=@"bundle-audit.json" \
+            -F 'scan_type=Bundler-Audit Scan' \
+            -F 'tags=test'
 
     # -----------------------
     # 5. Stopping Containers
