@@ -36,6 +36,9 @@ jobs:
       #     gem install bundler
       #     bundle install
 
+    # -----------------------
+    # 3. SBOM 
+    # -----------------------
       - name: Generate SBOM
         run: |
           gem install cyclonedx-ruby
@@ -47,7 +50,7 @@ jobs:
           path: sbom.json
 
     # -----------------------
-    # 3. Secrets Scan - Gitleaks
+    # 4. Secrets Scan - Gitleaks
     # -----------------------
       - name: Secret Scanning 
         continue-on-error: true
@@ -65,14 +68,9 @@ jobs:
             -F file=@"gitleaks.json" \
             -F 'scan_type=Gitleaks Scan' \
             -F 'tags=test'
-      # - name: Upload Gitleaks Artifact
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: gitleak-report
-      #     path: gitleaks.json
 
   # -----------------------
-  # 4. SCA - Bundler Audit
+  # 5. SCA - Bundler Audit
   # -----------------------          
       - name: Dependency Scan - Bundler Audit
         continue-on-error: true
@@ -93,14 +91,8 @@ jobs:
             -F 'scan_type=Bundler-Audit Scan' \
             -F 'tags=test'
           
-      # - name: Upload bundleAudit Artifact
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: bundle-audit-report
-      #     path: bundle-audit.json
-
   # -----------------------
-  # 5. SAST - Brakeman
+  # 6. SAST - Brakeman
   # -----------------------         
       - name: SAST testing
         run: |
@@ -118,14 +110,8 @@ jobs:
             -F 'scan_type=Brakeman Scan' \
             -F 'tags=test'
           
-      # - name: Upload SAST-Finding Artifact
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: SAST-Finding-Report
-      #     path: sast_fin.json
-
   # -----------------------
-  # 9. Upload Artifacts
+  # 7. Upload Artifacts
   # -----------------------
       - name: Upload Security Reports
         if: always()
@@ -137,40 +123,3 @@ jobs:
             brakeman.json
             bundle-audit.json
             sbom.json
-
-      - name: Secret Scanning
-        run: |
-          curl -sSfL https://raw.githubusercontent.com/trufflesecurity/trufflehog/main/scripts/install.sh | sh -s -- -b /usr/local/bin
-          trufflehog --version
-          trufflehog git https://github.com/${{ github.repository }} --json > trufflehog_results.json
-      - name: Upload TruffleHog Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: trufflehog-report
-          path: trufflehog_results.json
-
-      #  - name: Secrets Scan - Gitleaks
-     #   run: |
-      #    docker pull ghcr.io/gitleaks/gitleaks:latest
-       #   docker run -v https://github.com/${{ github.repository }}:/path ghcr.io/gitleaks/gitleaks:latest git -v --source=/path --report-format json --report-path /path/gitleaks.json
-            
-      # - name: Debug - List files
-      #   run: ls -la
-       
-#      - name: Linting and Styling
-#        run: |
-#          gem install rubocop
-#          rubocop -a
-
-      #bundle-audit
-  #Dependency-Scan:
-   # runs-on: ubuntu-latest
-    #needs: build
-    #permissions:
-    #  security-events: write
-    #steps:
-
-      # - name: Run Unit Tests
-      #   run: |
-      #     gem install rspec
-      #     rspec
