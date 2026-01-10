@@ -65,7 +65,7 @@
             <pollfreq>60</pollfreq>
             <pollunits>REQUESTS</pollunits>
             <loggedin>\QLogout\E</loggedin>
-            <loggedout>\QLocation: http://ruby_appsec_web_1:8880/users/sign_in\E</loggedout>
+            <loggedout>\Qsign_in\E</loggedout>
             <form>
                 <loginurl>http://ruby_appsec_web_1:8880/users/sign_in</loginurl>
                 <loginbody>user%5Bemail%5D={%username%}&amp;user%5Bpassword%5D={%password%}&amp;user%5Bremember_me%5D=0&amp;commit=Log+in</loginbody>
@@ -82,7 +82,7 @@
                   </credentials>
                 </user> 
         </users>
-        <forceduser>1</forceduser>
+        <forceduser>zap-user</forceduser>
         <session>
             <type>cookieBasedSessionManagement</type>
         </session>
