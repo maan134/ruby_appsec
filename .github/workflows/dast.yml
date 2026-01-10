@@ -83,7 +83,7 @@ jobs:
            mkdir -p zap_reports
            chmod 777 zap_reports
            docker run --rm --network ruby_appsec_zapnet \
-            -v $(pwd)/zap:/zap/wrk \
+            -v $(pwd)/zap:/zap/wrk:rw \
             ghcr.io/zaproxy/zaproxy:stable \
             env USER_NAME=$USER_NAME PASSWORD=$PASSWORD \
             zap-full-scan.py \
