@@ -100,7 +100,7 @@ jobs:
       - name: Upload DAST Vul to DefectDojo
         run: |
           ls $(pwd)/zap
-          cat zap_report.json
+          cat $(pwd)/zap/zap_report.json
       #     curl -X POST 'https://demo.defectdojo.org/api/v2/reimport-scan/' \
       #       -H 'accept: application/json' \
       #       -H 'Authorization: Token ${{ secrets.DEFECT_DOJO_TOKEN }}' \
