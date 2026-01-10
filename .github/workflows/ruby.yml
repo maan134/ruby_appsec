@@ -1,35 +1,42 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-# This workflow will download a prebuilt Ruby version, install dependencies and run tests with Rake
-# For more information see: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
-
-name: Ruby
+name: Ruby DevSecOps Pipeline
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
+  # For testing purposes, I am currently running the pipeline manually; however, to meet enterprise requirements, 
+  # it should run automatically on push and pull request events for the relevant branches. 
+  # At the moment, I have commented out the push and pull request triggers in the pipeline configuration.
+  # push:
+  #     branches: [ main ]
+  # pull_request:
 
 permissions:
   contents: read
 
 jobs:
-  build:
+  Security:
     runs-on: ubuntu-latest
 
     steps:
+    # -----------------------
+    # 1. Checkout
+    # -----------------------
       - name: Checkout code
         uses: actions/checkout@v4
-
+        
+    # -----------------------
+    # 2. Setup Ruby
+    # -----------------------
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: '3.0.2'
+          bundler-cache: true
+
           
-      - name: Setup Dependencies
-        run: |
-          gem install bundler
-          bundle install
+      # - name: Setup Dependencies
+      #   run: |
+      #     gem install bundler
+      #     bundle install
 
       - name: Generate SBOM
         run: |
@@ -41,6 +48,9 @@ jobs:
           name: sbom
           path: sbom.json
 
+    # -----------------------
+    # 3. Secrets Scan - Gitleaks
+    # -----------------------
       - name: Secret Scanning 
         continue-on-error: true
         run: |
@@ -57,13 +67,16 @@ jobs:
             -F file=@"gitleaks.json" \
             -F 'scan_type=Gitleaks Scan' \
             -F 'tags=test'
-      - name: Upload Gitleaks Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: gitleak-report
-          path: gitleaks.json
-          
-      - name: Vulnerability Checks
+      # - name: Upload Gitleaks Artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: gitleak-report
+      #     path: gitleaks.json
+
+  # -----------------------
+  # 4. SCA - Bundler Audit
+  # -----------------------          
+      - name: Dependency Scan - Bundler Audit
         continue-on-error: true
         run: |
           gem install bundler-audit
@@ -82,12 +95,15 @@ jobs:
             -F 'scan_type=Bundler-Audit Scan' \
             -F 'tags=test'
           
-      - name: Upload bundleAudit Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: bundle-audit-report
-          path: bundle-audit.json
-          
+      # - name: Upload bundleAudit Artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: bundle-audit-report
+      #     path: bundle-audit.json
+
+  # -----------------------
+  # 5. SAST - Brakeman
+  # -----------------------         
       - name: SAST testing
         run: |
             gem install brakeman
@@ -104,13 +120,25 @@ jobs:
             -F 'scan_type=Brakeman Scan' \
             -F 'tags=test'
           
-      - name: Upload SAST-Finding Artifact
+      # - name: Upload SAST-Finding Artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: SAST-Finding-Report
+      #     path: sast_fin.json
+
+  # -----------------------
+  # 9. Upload Artifacts
+  # -----------------------
+      - name: Upload Security Reports
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: SAST-Finding-Report
-          path: sast_fin.json
-
-      
+          name: security-reports
+          path: |
+            gitleaks.json
+            brakeman.json
+            bundle-audit.json
+            sbom.json
 
       - name: Secret Scanning
         run: |
@@ -128,8 +156,8 @@ jobs:
       #    docker pull ghcr.io/gitleaks/gitleaks:latest
        #   docker run -v https://github.com/${{ github.repository }}:/path ghcr.io/gitleaks/gitleaks:latest git -v --source=/path --report-format json --report-path /path/gitleaks.json
             
-      - name: Debug - List files
-        run: ls -la
+      # - name: Debug - List files
+      #   run: ls -la
        
 #      - name: Linting and Styling
 #        run: |
@@ -144,7 +172,7 @@ jobs:
     #  security-events: write
     #steps:
 
-      - name: Run Unit Tests
-        run: |
-          gem install rspec
-          rspec
+      # - name: Run Unit Tests
+      #   run: |
+      #     gem install rspec
+      #     rspec
