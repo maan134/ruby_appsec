@@ -63,6 +63,8 @@ jobs:
           USER_NAME: ${{ secrets.USER_NAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
         run: |
+           mkdir -p zap_reports
+           chmod 777 zap_reports
            docker run --rm --network ruby_appsec_zapnet \
             -v $(pwd)/zap:/zap/wrk \
             ghcr.io/zaproxy/zaproxy:stable \
