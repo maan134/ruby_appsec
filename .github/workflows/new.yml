@@ -65,7 +65,7 @@ jobs:
         run: |
            mkdir -p zap_reports
            chmod 777 zap_reports
-           docker run --rm --network ruby_appsec_zapnet \
+           docker run -d --rm --network ruby_appsec_zapnet \
             -v $(pwd)/zap:/zap/wrk \
             ghcr.io/zaproxy/zaproxy:stable \
             env USER_NAME=$USER_NAME PASSWORD=$PASSWORD \
@@ -74,6 +74,10 @@ jobs:
             -n auth.context \
             -t http://ruby_appsec_web_1:8880 \
             -r zap-report.html
+      - name: checking login
+        run: |
+          docker exec ruby_appsec_zap_1 \
+          curl -I http://ruby_appsec_web_1:8880/to_dos
       
       # - name: Run ZAP Docker
       #   run: |
