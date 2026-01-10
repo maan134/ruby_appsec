@@ -82,6 +82,7 @@ jobs:
         run: |
            mkdir -p zap_reports
            chmod 777 zap_reports
+           sudo chown 1000:1000 $(pwd)/zap
            docker run --rm --network ruby_appsec_zapnet \
             -v $(pwd)/zap:/zap/wrk:rw \
             ghcr.io/zaproxy/zaproxy:stable \
