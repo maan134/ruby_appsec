@@ -48,37 +48,42 @@ jobs:
         run: |
           docker exec ruby_appsec_web_1 rails tailwindcss:build
 
-      
-      # - name: Verify application is running
-      #   run: |
-      #     docker-compose ps -a
-      #     docker exec ruby_appsec_zap_1 curl --fail http://ruby_appsec_web_1:8880/users/sign_in || exit 1
-
-      - name: Extract CSRF Token
-        id: csrf
+    # -----------------------
+    # 3. Verify running application
+    # -----------------------
+      - name: Verify application is running
         run: |
-          TOKEN=$(docker exec ruby_appsec_web_1 \
-            curl -s http://ruby_appsec_web_1:8880/users/sign_in \
-            | grep -o 'name="authenticity_token" value="[^"]*"' \
-            | sed 's/.*value="//;s/"//')
-          echo "token=$TOKEN" >> $GITHUB_OUTPUT
+          docker-compose ps -a
+          docker exec ruby_appsec_zap_1 curl --fail http://ruby_appsec_web_1:8880/users/sign_in || exit 1
+
+    # -----------------------
+    # 4. Creating User
+    # -----------------------
 
       - name: Seed Database (optional)
         run: |
           docker exec ruby_appsec_db_1 psql -U postgres -d sql_injection_dev -c "INSERT INTO users (email, encrypted_password, created_at, updated_at) VALUES ('${{ secrets.USER_NAME }}', '${{ secrets.PASSWORD }}', '2025-01-15 10:30:00'::timestamp, '2025-01-15 10:30:00'::timestamp);"
           docker exec ruby_appsec_db_1 psql -U postgres -d sql_injection_dev -c "SELECT * FROM users;"
-        #  docker exec ruby_appsec_web_1 bash -c "rake db:seed"
 
-      # - name: Run ZAP Baseline Scan (via Docker)
-      #   run: |
-      #     mkdir -p zap_reports
-      #     chmod 777 zap_reports
-      #     docker run --rm --network ruby_appsec_zapnet \
-      #       -v $(pwd)/zap_reports:/zap/wrk \
-      #       ghcr.io/zaproxy/zaproxy:stable \
-      #       zap-baseline.py -t http://ruby_appsec_web_1:8880/users/sign_in -J zap_report.json -d || true
+    # I have not enforced any additional blocking conditions in the pipeline at this stage due to the issues identified. 
+    # However, in an enterprise DevSecOps setup, security tollgates can be introduced based on organizational requirements. 
+    # For example, thresholds can be defined for High or Medium severity findings, or an exception approval workflow can be 
+    # added as a separate step in the job. Based on the organization’s risk appetite and emergency release policies, deployments 
+    # can be conditionally approved by the CISO or designated security authority.
+    
+    # Example (conceptual DevSecOps gate step):
+    
+    # Fail the pipeline if High severity vulnerabilities are detected
+    
+    # Allow Medium severity findings with a documented exception
+    
+    # Add a manual approval step for emergency releases requiring CISO sign-off
+  
+    # -----------------------
+    # 4. Initiating DAST Scan
+    # -----------------------
 
-      - name: Checking Authentication
+      - name: DAST
         env:
           USER_NAME: ${{ secrets.USER_NAME }}
           PASSWORD: ${{ secrets.PASSWORD }}
@@ -93,32 +98,10 @@ jobs:
             -d \
             -n auth.context \
             -t http://ruby_appsec_web_1:8880 \
-            
-      # - name: checking login
-      #   run: |
-      #     docker exec ruby_appsec_zap_1 \
-      #     curl -I http://ruby_appsec_web_1:8880/to_dos
-      
-      # - name: Run ZAP Docker
-      #   run: |
-      #     mkdir -p zap_reports
-      #     chmod 777 zap_reports
-      #     docker run --rm \
-      #     --name ruby_appsec_zap_1 \
-      #     zap-baseline.py -t http://ruby_appsec_web_1:8880 -J zap_report.json -d || true
 
-      # - name: Run ZAP Baseline Scan (via Docker)
-      #   run: |
-      #     docker exec ruby_appsec_zap_1 \
-      #     zap-baseline.py -t http://ruby_appsec_web_1:8880
-        
-          
-    #      docker run --rm --network ruby_appsec_default \
-     #       -v $(pwd)/zap_reports:/zap/wrk \
-      #      ghcr.io/zaproxy/zaproxy:stable \
-       #     zap-baseline.py -t http://ruby_appsec_web_1:8880 -J zap_report.json -d || true   
-
-      
+    # -----------------------
+    # 5. Stopping Containers
+    # -----------------------
 
       - name: Stop containers
         if: always()
