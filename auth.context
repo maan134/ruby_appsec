@@ -4,8 +4,8 @@
         <name>Default Context</name>
         <desc/>
         <inscope>true</inscope>
-        <incregexes>http://localhost:8880.*</incregexes>
-        <excregexes>http://localhost:8880/users/sign_out.*</excregexes>
+        <incregexes>http://ruby_appsec_web_1:8880.*</incregexes>
+        <excregexes>http://ruby_appsec_web_1:8880/users/sign_out.*</excregexes>
         <tech>
             <include>Db.PostgreSQL</include>
             <include>Framework</include>
@@ -57,7 +57,7 @@
             <config>{"kvps":"&amp;","kvs":"=","struct":[]}</config>
         </postparser>
         <authentication>
-            <type>2</type>
+            <type>formBasedAuthentication</type>
             <strategy>EACH_RESP</strategy>
             <pollurl/>
             <polldata/>
@@ -65,19 +65,28 @@
             <pollfreq>60</pollfreq>
             <pollunits>REQUESTS</pollunits>
             <loggedin>\QLogout\E</loggedin>
-            <loggedout>\QLocation: http://localhost:8880/users/sign_in\E</loggedout>
+            <loggedout>\QLocation: http://ruby_appsec_web_1:8880/users/sign_in\E</loggedout>
             <form>
-                <loginurl>http://localhost:8880/users/sign_in</loginurl>
+                <loginurl>http://ruby_appsec_web_1:8880/users/sign_in</loginurl>
                 <loginbody>authenticity_token={%value%}&amp;user%5Bemail%5D={%username%}&amp;user%5Bpassword%5D={%password%}&amp;user%5Bremember_me%5D=0&amp;commit=Log+in</loginbody>
-                <loginpageurl>http://localhost:8880/users/sign_in</loginpageurl>
+                <loginpageurl>http://ruby_appsec_web_1:8880/users/sign_in</loginpageurl>
             </form>
         </authentication>
         <users>
-            <user>117;true;bW0xMjNAZ21haWwuY29t;2;bW0xMjNAZ21haWwuY29t~YWJjMTIz~</user>
+            <users>
+                <user>
+                  <name>zap-user</name>
+                  <enabled>true</enabled>
+                  <credentials>
+                    <username>${USER_NAME}</username>
+                    <password>${PASSWORD}</password>
+                  </credentials>
+                </user>
+              </users>    
         </users>
-        <forceduser>117</forceduser>
+        <forceduser>1</forceduser>
         <session>
-            <type>0</type>
+            <type>cookieBasedSessionManagement</type>
         </session>
         <authorization>
             <type>0</type>
