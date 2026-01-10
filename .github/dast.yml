@@ -1,0 +1,126 @@
+name: Rails Docker CI Pipeline
+
+on:
+  workflow_dispatch:
+  # For testing purposes, I am currently running the pipeline manually; however, to meet enterprise requirements, 
+  # it should run automatically on push and pull request events for the relevant branches. 
+  # At the moment, I have commented out the push and pull request triggers in the pipeline configuration.
+  # push:
+  #     branches: [ main ]
+  # pull_request:
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+    # -----------------------
+    # 1. Checkout
+    # -----------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+    # -----------------------
+    # 2. Build Imand and Start Container
+    # -----------------------
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Build Docker images
+        run: |
+          docker-compose build
+
+      - name: Start application containers
+        run: |
+          docker-compose up -d 
+                 
+      - name: Wait for services to be ready
+        run: |
+          sleep 20
+
+      - name: Build Tailwind CSS
+        run: |
+          docker exec ruby_appsec_web_1 rails tailwindcss:build
+
+      
+      # - name: Verify application is running
+      #   run: |
+      #     docker-compose ps -a
+      #     docker exec ruby_appsec_zap_1 curl --fail http://ruby_appsec_web_1:8880/users/sign_in || exit 1
+
+      - name: Extract CSRF Token
+        id: csrf
+        run: |
+          TOKEN=$(docker exec ruby_appsec_web_1 \
+            curl -s http://ruby_appsec_web_1:8880/users/sign_in \
+            | grep -o 'name="authenticity_token" value="[^"]*"' \
+            | sed 's/.*value="//;s/"//')
+          echo "token=$TOKEN" >> $GITHUB_OUTPUT
+
+      - name: Seed Database (optional)
+        run: |
+          docker exec ruby_appsec_db_1 psql -U postgres -d sql_injection_dev -c "INSERT INTO users (email, encrypted_password, created_at, updated_at) VALUES ('${{ secrets.USER_NAME }}', '${{ secrets.PASSWORD }}', '2025-01-15 10:30:00'::timestamp, '2025-01-15 10:30:00'::timestamp);"
+          docker exec ruby_appsec_db_1 psql -U postgres -d sql_injection_dev -c "SELECT * FROM users;"
+        #  docker exec ruby_appsec_web_1 bash -c "rake db:seed"
+
+      # - name: Run ZAP Baseline Scan (via Docker)
+      #   run: |
+      #     mkdir -p zap_reports
+      #     chmod 777 zap_reports
+      #     docker run --rm --network ruby_appsec_zapnet \
+      #       -v $(pwd)/zap_reports:/zap/wrk \
+      #       ghcr.io/zaproxy/zaproxy:stable \
+      #       zap-baseline.py -t http://ruby_appsec_web_1:8880/users/sign_in -J zap_report.json -d || true
+
+      - name: Checking Authentication
+        env:
+          USER_NAME: ${{ secrets.USER_NAME }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+        run: |
+           mkdir -p zap_reports
+           chmod 777 zap_reports
+           docker run --rm --network ruby_appsec_zapnet \
+            -v $(pwd)/zap:/zap/wrk \
+            ghcr.io/zaproxy/zaproxy:stable \
+            env USER_NAME=$USER_NAME PASSWORD=$PASSWORD \
+            zap-full-scan.py \
+            -d \
+            -n auth.context \
+            -t http://ruby_appsec_web_1:8880 \
+            
+      # - name: checking login
+      #   run: |
+      #     docker exec ruby_appsec_zap_1 \
+      #     curl -I http://ruby_appsec_web_1:8880/to_dos
+      
+      # - name: Run ZAP Docker
+      #   run: |
+      #     mkdir -p zap_reports
+      #     chmod 777 zap_reports
+      #     docker run --rm \
+      #     --name ruby_appsec_zap_1 \
+      #     zap-baseline.py -t http://ruby_appsec_web_1:8880 -J zap_report.json -d || true
+
+      # - name: Run ZAP Baseline Scan (via Docker)
+      #   run: |
+      #     docker exec ruby_appsec_zap_1 \
+      #     zap-baseline.py -t http://ruby_appsec_web_1:8880
+        
+          
+    #      docker run --rm --network ruby_appsec_default \
+     #       -v $(pwd)/zap_reports:/zap/wrk \
+      #      ghcr.io/zaproxy/zaproxy:stable \
+       #     zap-baseline.py -t http://ruby_appsec_web_1:8880 -J zap_report.json -d || true   
+
+      
+
+      - name: Stop containers
+        if: always()
+        run: |
+          docker-compose down
