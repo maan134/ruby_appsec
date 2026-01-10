@@ -31,10 +31,19 @@ jobs:
         with:
           ruby-version: '3.0.2'
                     
-      # - name: Setup Dependencies
-      #   run: |
-      #     gem install bundler
-      #     bundle install
+    # I have not enforced any additional blocking conditions in the pipeline at this stage due to the issues identified. 
+    # However, in an enterprise DevSecOps setup, security tollgates can be introduced based on organizational requirements. 
+    # For example, thresholds can be defined for High or Medium severity findings, or an exception approval workflow can be 
+    # added as a separate step in the job. Based on the organization’s risk appetite and emergency release policies, deployments 
+    # can be conditionally approved by the CISO or designated security authority.
+    
+    # Example (conceptual DevSecOps gate step):
+    
+    # Fail the pipeline if High severity vulnerabilities are detected
+    
+    # Allow Medium severity findings with a documented exception
+    
+    # Add a manual approval step for emergency releases requiring CISO sign-off
 
     # -----------------------
     # 3. SBOM 
