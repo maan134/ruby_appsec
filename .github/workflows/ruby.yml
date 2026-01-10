@@ -105,7 +105,7 @@ jobs:
       - name: SAST testing
         run: |
             gem install brakeman
-            brakeman --no-exit-on-warn --no-exit-on-error -f json -o sast_fin.json    
+            brakeman --no-exit-on-warn --no-exit-on-error -f json -o brakeman.json    
       - name: Upload bundleAudit to DefectDojo
         run: |
           curl -X POST 'https://demo.defectdojo.org/api/v2/reimport-scan/' \
