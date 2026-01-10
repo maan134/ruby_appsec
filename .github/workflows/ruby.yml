@@ -114,7 +114,7 @@ jobs:
             -F 'test=43' \
             -F 'active=true' \
             -F '[email protected];type=application/json' \
-            -F file=@"sast_fin.json" \
+            -F file=@"brakeman.json" \
             -F 'scan_type=Brakeman Scan' \
             -F 'tags=test'
           
