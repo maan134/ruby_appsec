@@ -67,7 +67,7 @@ jobs:
             -v $(pwd)/zap_reports:/zap/wrk \
             ghcr.io/zaproxy/zaproxy:stable \
             env USER_NAME=$USER_NAME PASSWORD=$PASSWORD \
-            zap-full-scan.py -d -n auth.context -t http://ruby_appsec_web_1:8880/users/sign_in
+            zap-full-scan.py -d -n auth.context
       
       # - name: Run ZAP Docker
       #   run: |
