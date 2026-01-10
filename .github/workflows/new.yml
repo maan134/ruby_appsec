@@ -45,8 +45,10 @@ jobs:
       - name: Extract CSRF Token
         id: csrf
         run: |
-          TOKEN=$(docker exec -T ruby_appsec_web_1 curl -s http://ruby_appsec_web_1:8880/users/sign_in \
-            | grep authenticity_token | sed -E 's/.*value="([^"]*)".*/\1/')
+          TOKEN=$(docker exec ruby_appsec_web_1 \
+            curl -s http://ruby_appsec_web_1:8880/users/sign_in \
+            | grep -o 'name="authenticity_token" value="[^"]*"' \
+            | sed 's/.*value="//;s/"//')
           echo "token=$TOKEN" >> $GITHUB_OUTPUT
 
       - name: Seed Database (optional)
