@@ -26,8 +26,8 @@ services:
     depends_on:
       - web
     volumes:
-     # - ./zap-config:/zap/wrk:ro
-      - .:/zap/wrk
+      - ./zap-config:/zap/wrk
+     # - .:/zap/wrk
     networks:
       - zapnet
     command: >
