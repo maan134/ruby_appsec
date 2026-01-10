@@ -30,11 +30,12 @@ services:
      # - .:/zap/wrk
     networks:
       - zapnet
-    command: >
-      sh -c "sleep 10 && zap-full-scan.py
-      -t http://ruby_appsec_web_1:8880
-      -r zap-report.html
-      -J zap-report.json"
+    command: zap.sh -daemon -host 0.0.0.0 -port 8080
+    
+      # sh -c "sleep 10 && zap-full-scan.py
+      # -t http://ruby_appsec_web_1:8880
+      # -r zap-report.html
+      # -J zap-report.json"
     
 
 networks:
