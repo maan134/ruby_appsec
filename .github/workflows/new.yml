@@ -42,6 +42,13 @@ jobs:
       #     docker-compose ps -a
       #     docker exec ruby_appsec_zap_1 curl --fail http://ruby_appsec_web_1:8880/users/sign_in || exit 1
 
+      - name: Extract CSRF Token
+        id: csrf
+        run: |
+          TOKEN=$(docker exec -T ruby_appsec_web_1 curl -s http://ruby_appsec_web_1:8880/users/sign_in \
+            | grep authenticity_token | sed -E 's/.*value="([^"]*)".*/\1/')
+          echo "token=$TOKEN" >> $GITHUB_OUTPUT
+
       - name: Seed Database (optional)
         run: |
           docker exec ruby_appsec_db_1 psql -U postgres -d sql_injection_dev -c "INSERT INTO users (email, encrypted_password, created_at, updated_at) VALUES ('${{ secrets.USER_NAME }}', '${{ secrets.ENC_PWD }}', '2025-01-15 10:30:00'::timestamp, '2025-01-15 10:30:00'::timestamp);"
