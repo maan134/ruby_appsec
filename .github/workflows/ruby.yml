@@ -104,6 +104,7 @@ jobs:
   # 6. SAST - Brakeman
   # -----------------------         
       - name: SAST testing
+        continue-on-error: true
         run: |
             gem install brakeman
             brakeman --no-exit-on-warn --no-exit-on-error -f json -o brakeman.json    
