@@ -1,0 +1,90 @@
+env:
+  contexts:
+  - name: http://localhost:8880
+    urls:
+    - http://localhost:8880
+    includePaths:
+    - http://localhost:8880.*
+    excludePaths:
+    - http://localhost:8880/users/sign_out.*
+    authentication:
+      method: form
+      parameters:
+        loginPageUrl: http://localhost:8880/users/sign_in
+        loginRequestUrl: http://localhost:8880/users/sign_in
+        loginRequestBody: "authenticity_token={%value%}&user%5Bemail%5D={%username%}&user%5Bpassword%5D={%password%}&user%5Bremember_me%5D=0&commit=Log+in"
+      verification:
+        method: response
+        loggedInRegex: \QLogout\E
+        loggedOutRegex: "\\QLocation: http://localhost:8880/users/sign_in\\E"
+        pollFrequency: 60
+        pollUnits: requests
+        pollUrl: ""
+        pollPostData: ""
+    sessionManagement:
+      method: cookie
+    technology:
+      exclude:
+      - C
+      - MacOS
+      - ASP
+      - IBM DB2
+      - SQLite
+      - PHP
+      - CouchDB
+      - Linux
+      - Microsoft SQL Server
+      - MariaDB
+      - Oracle
+      - JSP/Servlet
+      - MongoDB
+      - Firebird
+      - HypersonicSQL
+      - MySQL
+      - SAP MaxDB
+      - SVN
+      - JavaScript
+      - WS
+      - Microsoft Access
+      - Java
+      - Sybase
+      - Python
+    structure: {}
+    users:
+    - name: mm123@gmail.com
+      credentials:
+        password: abc123
+        username: mm123@gmail.com
+  parameters: {}
+jobs:
+- type: passiveScan-config
+  parameters: {}
+- type: spider
+  parameters: {}
+  tests:
+  - name: At least 100 URLs found
+    type: stats
+    onFail: INFO
+    statistic: automation.spider.urls.added
+    operator: '>='
+    value: 100
+- type: spiderAjax
+  parameters: {}
+  tests:
+  - name: At least 100 URLs found
+    type: stats
+    onFail: INFO
+    statistic: spiderAjax.urls.added
+    operator: '>='
+    value: 100
+- type: passiveScan-wait
+  parameters: {}
+- type: activeScan
+  parameters: {}
+  policyDefinition: {}
+- type: report
+  parameters:
+    reportTitle: ZAP by Checkmarx Scanning Report
+- type: exitStatus
+  parameters: {}
+
