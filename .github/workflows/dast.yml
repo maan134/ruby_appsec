@@ -96,17 +96,17 @@ jobs:
     # 5. Uploading Result
     # ----------------------- 
 
-      - name: Upload DAST Vul to DefectDojo
-        run: |
-          curl -X POST 'https://demo.defectdojo.org/api/v2/reimport-scan/' \
-            -H 'accept: application/json' \
-            -H 'Authorization: Token ${{ secrets.DEFECT_DOJO_TOKEN }}' \
-            -F 'test=46' \
-            -F 'active=true' \
-            -F '[email protected];type=application/json' \
-            -F file=@"zap_report.json" \
-            -F 'scan_type=ZAP Scan' \
-            -F 'tags=test'
+      # - name: Upload DAST Vul to DefectDojo
+      #   run: |
+      #     curl -X POST 'https://demo.defectdojo.org/api/v2/reimport-scan/' \
+      #       -H 'accept: application/json' \
+      #       -H 'Authorization: Token ${{ secrets.DEFECT_DOJO_TOKEN }}' \
+      #       -F 'test=46' \
+      #       -F 'active=true' \
+      #       -F '[email protected];type=application/json' \
+      #       -F file=@"zap_report.json" \
+      #       -F 'scan_type=ZAP Scan' \
+      #       -F 'tags=test'
 
     # -----------------------
     # 5. Stopping Containers
