@@ -63,7 +63,7 @@ jobs:
            docker run --rm --network ruby_appsec_zapnet \
             -v $(pwd)/zap_reports:/zap/wrk \
             ghcr.io/zaproxy/zaproxy:stable \
-            zap-full-scan.py -d -n auth.context
+            zap-full-scan.py -d -n auth.context -t http://ruby_appsec_web_1:8880/users/sign_in
       
       # - name: Run ZAP Docker
       #   run: |
